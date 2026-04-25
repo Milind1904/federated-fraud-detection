@@ -8,29 +8,29 @@ Concept drift is monitored continuously and triggers automatic retraining.
 ---
 
 ## Architecture overview
-5 Bank Clients (IEEE-CIS partitions)
-│
-│  local training (no raw data shared)
-▼
-FedAvg Server  ──►  Global Model (PyTorch MLP)
-│
-▼
-FastAPI Scoring Engine
-│
-├──►  /predict      — fraud probability + risk level
-├──►  /explain      — SHAP feature attributions per prediction
-└──►  /drift/status — concept drift monitor
-│
-▼
-SQLite Prediction Log
-│
-▼
-Streamlit Dashboard
-├── Live feed      — real-time scoring + SHAP waterfall
-├── Model health   — AUC/F1 across federated rounds
-├── Drift monitor  — DDM + sliding window + SHAP drift
-└── Federated view — per-client loss convergence
----
+
+    5 Bank Clients (IEEE-CIS partitions)
+            │
+            │  local training (no raw data shared)
+            ▼
+      FedAvg Server  ──►  Global Model (PyTorch MLP)
+            │
+            ▼
+      FastAPI Scoring Engine
+            │
+            ├──►  /predict      — fraud probability + risk level
+            ├──►  /explain      — SHAP feature attributions per prediction
+            └──►  /drift/status — concept drift monitor
+                    │
+                    ▼
+            SQLite Prediction Log
+                    │
+                    ▼
+            Streamlit Dashboard
+            ├── Live feed      — real-time scoring + SHAP waterfall
+            ├── Model health   — AUC/F1 across federated rounds
+            ├── Drift monitor  — DDM + sliding window + SHAP drift
+            └── Federated view — per-client loss convergence
 
 ## Key features
 
@@ -77,50 +77,23 @@ Required files: `train_transaction.csv`, `train_identity.csv`
 
 ## Project structure
 federated-fraud-detection/
-├── data/
-│   ├── raw/                    # IEEE-CIS CSVs
-│   ├── clients/                # 5 client partitions + global test
-│   ├── models/                 # federated model checkpoints
-│   └── processed/              # scaler.pkl + predictions.db
-├── src/
-│   ├── simulator/              # data pipeline
-│   │   ├── schema.py           # feature definitions
-│   │   ├── generate.py         # data partitioning
-│   │   ├── preprocess.py       # scaling pipeline
-│   │   └── validate.py         # data validation
-│   ├── models/
-│   │   └── mlp.py              # PyTorch FraudMLP
-│   ├── federated/
-│   │   ├── client.py           # local training loop
-│   │   ├── server.py           # FedAvg + evaluation
-│   │   └── train.py            # federated orchestrator
-│   └── drift/
-│       ├── detector.py         # DDM + sliding window + SHAP drift
-│       ├── monitor.py          # background monitoring thread
-│       └── retrainer.py        # federated retraining on drift
-├── api/
-│   ├── main.py                 # FastAPI app
-│   ├── schemas.py              # Pydantic models
-│   ├── model_loader.py         # model + scaler loading
-│   ├── predictor.py            # inference pipeline
-│   ├── explainer.py            # SHAP wrapper
-│   ├── database.py             # SQLite operations
-│   └── logger.py               # prediction logging
-├── dashboard/
-│   ├── app.py                  # Streamlit entry point
-│   ├── style.py                # dark terminal theme
-│   ├── api_client.py           # HTTP client
-│   ├── config.py               # constants
-│   └── tabs/
-│       ├── live_feed.py        # transaction scoring UI
-│       ├── model_health.py     # training metrics
-│       ├── drift_monitor.py    # drift events + SHAP timeline
-│       └── federated_view.py   # per-client stats
-├── logs/
-│   └── round_history.json      # federated training history
-├── requirements.txt
-├── run_demo.sh                 # one-command startup
-└── README.md
+    ├── data/
+    │   ├── raw/                    # IEEE-CIS CSVs
+    │   ├── clients/                # 5 client partitions + global test
+    │   ├── models/                 # federated model checkpoints
+    │   └── processed/              # scaler.pkl + predictions.db
+    ├── src/
+    │   ├── simulator/              # data pipeline
+    │   ├── models/                 # PyTorch FraudMLP
+    │   ├── federated/              # FedAvg training
+    │   └── drift/                  # drift detection + retraining
+    ├── api/                        # FastAPI scoring engine
+    ├── dashboard/                  # Streamlit UI
+    │   └── tabs/                   # live feed, model health, drift, federated
+    ├── logs/                       # round_history.json
+    ├── requirements.txt
+    ├── run_demo.sh
+    └── README.md
 ---
 
 ## Setup
