@@ -1,0 +1,32 @@
+# Data files (too large for GitHub)
+data/raw/
+data/clients/
+data/models/
+data/processed/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Environments
+venv/
+.env
+*.env
+
+# Logs
+logs/*.json
+
+# VS Code
+.vscode/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# OS
+.DS_Store
+Thumbs.db
