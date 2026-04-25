@@ -76,7 +76,8 @@ Required files: `train_transaction.csv`, `train_identity.csv`
 ---
 
 ## Project structure
-federated-fraud-detection/
+
+    federated-fraud-detection/
     ├── data/
     │   ├── raw/                    # IEEE-CIS CSVs
     │   ├── clients/                # 5 client partitions + global test
@@ -94,7 +95,6 @@ federated-fraud-detection/
     ├── requirements.txt
     ├── run_demo.sh
     └── README.md
----
 
 ## Setup
 
